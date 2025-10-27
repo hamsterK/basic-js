@@ -13,9 +13,50 @@ const { NotImplementedError } = require('../lib');
  * transform([1, 2, 3, '--discard-prev', 4, 5]) => [1, 2, 4, 5]
  *
  */
-function transform(/* arr */) {
+function transform(arr) {
   // Remove line below and write your code here
-  throw new NotImplementedError('Not implemented');
+  if (!Array.isArray(arr)) {
+    throw new Error("'arr' parameter must be an instance of the Array!");
+  }
+  const newArr = [];
+  let flag = null;
+  let flagDiscardedNext = false;
+  arr.forEach((item, index) => {
+    switch (item) {
+      case '--discard-next':
+        flag = '--discard-next'
+        flagDiscardedNext = true;
+        break;
+      case '--discard-prev':
+        if (newArr.length > 0 && flag !== '--discard-next' && !flagDiscardedNext) {
+          newArr.pop();
+        }
+        flagDiscardedNext = false;
+        break;
+      case '--double-next':
+        flag = '--double-next'
+        flagDiscardedNext = false;
+        break;
+      case '--double-prev':
+        if (newArr.length > 0 && flag !== '--discard-next' && !flagDiscardedNext) {
+          newArr.push(newArr[newArr.length - 1]);
+        }
+        flagDiscardedNext = false;
+        break;
+      default:
+        if (flag === '--discard-next') {
+          flag = null;
+        } else if (flag === '--double-next') {
+          newArr.push(item);
+          newArr.push(item);
+          flag = null;
+        } else {
+          newArr.push(item);
+        }
+        break;
+  }
+    });
+  return newArr;
 }
 
 module.exports = {
