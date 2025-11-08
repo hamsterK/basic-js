@@ -13,7 +13,8 @@ const { NotImplementedError } = require('../lib');
  */
 function sortByHeight(arr) {
   // Remove line below and write your code here
-  return arr.sort((a, b) => a - b);
+  const valuesToSort = arr.filter(x => x !== -1).sort((a, b) => a - b);
+  return arr.map(x => x === -1? -1 : valuesToSort.shift());
 }
 
 module.exports = {
